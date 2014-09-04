@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.exoplaform.org/xml/ns/kernel_1_2.xsd http://www.exoplaform.org/xml/ns/kernel_1_2.xsd"
+	xmlns="http://www.exoplaform.org/xml/ns/kernel_1_2.xsd">
+
+  <component>
+    <type>org.exoplatform.addons.spacesadministration.SpacesAdministrationStorage</type>
+  </component>
+
+  <component>
+    <type>org.exoplatform.addons.spacesadministration.SpacesAdministrationService</type>
+    <init-params>
+      <value-param>
+        <name>exo.spaces.create.memberships</name>
+        <value>${exo.spaces.create.memberships:*:/platform/administrators}</value>
+      </value-param>
+    </init-params>
+  </component>
+
+  <component>
+    <key>org.exoplatform.social.core.space.spi.SpaceService</key>
+    <type>org.exoplatform.addons.spacesadministration.SpaceServiceImpl</type>
+  </component>
+
+  <external-component-plugins>
+    <target-component>org.exoplatform.services.jcr.RepositoryService</target-component>
+    <component-plugin>
+      <name>add.nodeType</name>
+      <set-method>addPlugin</set-method>
+      <type>org.exoplatform.services.jcr.impl.AddNodeTypePlugin</type>
+      <init-params>
+        <values-param>
+          <name>autoCreatedInNewRepository</name>
+          <description>Node types configuration file</description>
+          <value>war:/conf/spaces-administration/nodetypes.xml</value>
+        </values-param>
+      </init-params>
+    </component-plugin>
+  </external-component-plugins>
+
+  <import>war:/conf/spaces-administration/portal/portal-configuration.xml</import>
+
+</configuration>

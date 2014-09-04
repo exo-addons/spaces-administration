@@ -1,0 +1,20 @@
+<div id="spacesAdministration" class="spaces-administration">
+  <div id="spacesAdministrationMessage">
+  </div>
+
+  Memberships allowed to create spaces :
+  <ul id="listMemberships">
+  </ul>
+
+  <div id="newMembership">
+    <select id="membershipType">
+      <% membershipTypes.each { membershipType -> out.println("<option value=\"${membershipType.name}\">${membershipType.name}</option>") } %>
+    </select> : <select id="group">
+    <% groups.each { group -> out.println("<option value=\"${group.id}\">${group.label} (${group.id})</option>") } %>
+  </select> <a class="btn btn-primary" onclick="addMembership()">Add Role</a>
+  </div>
+
+  <div class="spaces-administration-actions">
+    <a class="btn" onclick="resetToDefaults()">Reset to defaults</a>
+  </div>
+</div>
