@@ -2,7 +2,7 @@
 
 Define who can create spaces !
 
-Tested on eXo 4.1-RC1.
+Tested on eXo 4.0+, 4.1-M2 and 4.1-RC1.
 
 ## Installation
 
