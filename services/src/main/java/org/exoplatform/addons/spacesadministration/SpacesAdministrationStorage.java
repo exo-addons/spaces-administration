@@ -30,13 +30,18 @@ public class SpacesAdministrationStorage {
    * Check if the Settings node exists
    * @return The node containing the memberships
    */
-  public boolean settingsEntityExists() {
+  public boolean settingsEntityExists() throws Exception {
+    Session session = null;
     try {
-      Session session = getSession();
+      session = getSession();
       return session.getRootNode().hasNode(SETTINGS_NODE_PATH);
     } catch (RepositoryException e) {
       log.error("Error while checking spaces administration settings node existence - Cause : " + e.getMessage(), e);
       return false;
+    } finally {
+      if (session != null) {
+        session.logout();
+      }
     }
   }
 
@@ -45,12 +50,19 @@ public class SpacesAdministrationStorage {
    * @return The newly created Settings node
    * @throws RepositoryException
    */
-  protected void createSettingsEntity() throws RepositoryException {
-    Session session = getSession();
-    Node settingsNode = session.getRootNode().addNode(SETTINGS_NODE_PATH);
-    settingsNode.setProperty(SETTINGS_NODE_CREATE_MEMBERSHIP_PROPERTY, "");
+  protected void createSettingsEntity() throws Exception {
+    Session session = null;
+    try {
+      session = getSession();
+      Node settingsNode = session.getRootNode().addNode(SETTINGS_NODE_PATH);
+      settingsNode.setProperty(SETTINGS_NODE_CREATE_MEMBERSHIP_PROPERTY, "");
 
-    session.save();
+      session.save();
+    } finally {
+      if (session != null) {
+        session.logout();
+      }
+    }
   }
 
   /**
@@ -65,44 +77,52 @@ public class SpacesAdministrationStorage {
 
     String membershipToAdd = membership.getMembershipType() + ":" + membership.getGroup();
 
-    Session session = getSession();
-    Node settingsNode;
-    if(session.getRootNode().hasNode(SETTINGS_NODE_PATH)) {
-      settingsNode = session.getRootNode().getNode(SETTINGS_NODE_PATH);
-    } else {
-      throw new Exception("Spaces Administration Settings Node does not exist - Cannot add the membership " + membershipToAdd);
-    }
-
-    String newMembership = membership.getMembershipType() + ":" + membership.getGroup();
-
-    String currentCreateSpaceMemberships = settingsNode.getProperty(SETTINGS_NODE_CREATE_MEMBERSHIP_PROPERTY).getString();
-    String newCreateSpaceMemberships = currentCreateSpaceMemberships;
-    if(!currentCreateSpaceMemberships.isEmpty()) {
-      // check if the membership already exists
-      String[] currentCreateSpaceMembershipsArray = currentCreateSpaceMemberships.split(",");
-      for(String currentCreateSpaceMembership : currentCreateSpaceMembershipsArray) {
-        if(currentCreateSpaceMembership.equals(newMembership)) {
-          // no need to add it, it is already there
-          return;
-        }
+    Session session = null;
+    try {
+      session = getSession();
+      Node settingsNode;
+      if(session.getRootNode().hasNode(SETTINGS_NODE_PATH)) {
+        settingsNode = session.getRootNode().getNode(SETTINGS_NODE_PATH);
+      } else {
+        throw new Exception("Spaces Administration Settings Node does not exist - Cannot add the membership " + membershipToAdd);
       }
 
-      newCreateSpaceMemberships += ",";
+      String newMembership = membership.getMembershipType() + ":" + membership.getGroup();
+
+      String currentCreateSpaceMemberships = settingsNode.getProperty(SETTINGS_NODE_CREATE_MEMBERSHIP_PROPERTY).getString();
+      String newCreateSpaceMemberships = currentCreateSpaceMemberships;
+      if(!currentCreateSpaceMemberships.isEmpty()) {
+        // check if the membership already exists
+        String[] currentCreateSpaceMembershipsArray = currentCreateSpaceMemberships.split(",");
+        for(String currentCreateSpaceMembership : currentCreateSpaceMembershipsArray) {
+          if(currentCreateSpaceMembership.equals(newMembership)) {
+            // no need to add it, it is already there
+            return;
+          }
+        }
+
+        newCreateSpaceMemberships += ",";
+      }
+      newCreateSpaceMemberships += newMembership;
+      settingsNode.setProperty(SETTINGS_NODE_CREATE_MEMBERSHIP_PROPERTY, newCreateSpaceMemberships);
+      settingsNode.save();
+    } finally {
+      if (session != null) {
+        session.logout();
+      }
     }
-    newCreateSpaceMemberships += newMembership;
-    settingsNode.setProperty(SETTINGS_NODE_CREATE_MEMBERSHIP_PROPERTY, newCreateSpaceMemberships);
-    settingsNode.save();
   }
 
   /**
    * Get JCR node storing the memberships
    * @return The node containing the memberships
    */
-  public List<MembershipEntry> getSpaceCreationMemberships() {
+  public List<MembershipEntry> getSpaceCreationMemberships() throws Exception {
     List<MembershipEntry> memberships = new ArrayList<MembershipEntry>();
 
+    Session session = null;
     try {
-      Session session = getSession();
+      session = getSession();
       if(session.getRootNode().hasNode(SETTINGS_NODE_PATH)) {
         Node settingsNode = session.getRootNode().getNode(SETTINGS_NODE_PATH);
         String createSpaceMemberships = settingsNode.getProperty(SETTINGS_NODE_CREATE_MEMBERSHIP_PROPERTY).getString();
@@ -122,9 +142,10 @@ public class SpacesAdministrationStorage {
       } else {
         return null;
       }
-    } catch (RepositoryException e) {
-      log.error("Error while fetching spaces administration settings node - Cause : " + e.getMessage(), e);
-      return null;
+    } finally {
+      if (session != null) {
+        session.logout();
+      }
     }
   }
 
@@ -140,28 +161,35 @@ public class SpacesAdministrationStorage {
 
     String membershipToDelete = membership.getMembershipType() + ":" + membership.getGroup();
 
-    Session session = getSession();
-    Node settingsNode;
-    if(session.getRootNode().hasNode(SETTINGS_NODE_PATH)) {
-      settingsNode = session.getRootNode().getNode(SETTINGS_NODE_PATH);
-    } else {
-      throw new Exception("Spaces Administration Settings Node does not exist - Cannot delete the membership " + membershipToDelete);
-    }
+    Session session = null;
+    try {
+      session = getSession();
+      Node settingsNode;
+      if(session.getRootNode().hasNode(SETTINGS_NODE_PATH)) {
+        settingsNode = session.getRootNode().getNode(SETTINGS_NODE_PATH);
+      } else {
+        throw new Exception("Spaces Administration Settings Node does not exist - Cannot delete the membership " + membershipToDelete);
+      }
 
-    String currentCreateSpaceMemberships = settingsNode.getProperty(SETTINGS_NODE_CREATE_MEMBERSHIP_PROPERTY).getString();
-    String[] currentCreateSpaceMembershipsArray = currentCreateSpaceMemberships.split(",");
-    StringBuilder newCreateSpaceMemberships = new StringBuilder();
-    for(String currentCreateSpaceMembership : currentCreateSpaceMembershipsArray) {
-      if(!currentCreateSpaceMembership.equals(membershipToDelete)) {
-        newCreateSpaceMemberships.append(currentCreateSpaceMembership + ",");
+      String currentCreateSpaceMemberships = settingsNode.getProperty(SETTINGS_NODE_CREATE_MEMBERSHIP_PROPERTY).getString();
+      String[] currentCreateSpaceMembershipsArray = currentCreateSpaceMemberships.split(",");
+      StringBuilder newCreateSpaceMemberships = new StringBuilder();
+      for(String currentCreateSpaceMembership : currentCreateSpaceMembershipsArray) {
+        if(!currentCreateSpaceMembership.equals(membershipToDelete)) {
+          newCreateSpaceMemberships.append(currentCreateSpaceMembership + ",");
+        }
+      }
+      if(newCreateSpaceMemberships.length() > 0) {
+        newCreateSpaceMemberships.deleteCharAt(newCreateSpaceMemberships.length() - 1);
+      }
+
+      settingsNode.setProperty(SETTINGS_NODE_CREATE_MEMBERSHIP_PROPERTY, newCreateSpaceMemberships.toString());
+      settingsNode.save();
+    } finally {
+      if (session != null) {
+        session.logout();
       }
     }
-    if(newCreateSpaceMemberships.length() > 0) {
-      newCreateSpaceMemberships.deleteCharAt(newCreateSpaceMemberships.length() - 1);
-    }
-
-    settingsNode.setProperty(SETTINGS_NODE_CREATE_MEMBERSHIP_PROPERTY, newCreateSpaceMemberships.toString());
-    settingsNode.save();
   }
 
   /**
@@ -169,12 +197,19 @@ public class SpacesAdministrationStorage {
    * @throws RepositoryException
    */
   public void deleteSettingsEntity() throws RepositoryException {
-    Session session = getSession();
-    if(session.getRootNode().hasNode(SETTINGS_NODE_PATH)) {
-      Node settingsNode = session.getRootNode().getNode(SETTINGS_NODE_PATH);
+    Session session = null;
+    try {
+      session = getSession();
+      if(session.getRootNode().hasNode(SETTINGS_NODE_PATH)) {
+        Node settingsNode = session.getRootNode().getNode(SETTINGS_NODE_PATH);
 
-      settingsNode.remove();
-      session.save();
+        settingsNode.remove();
+        session.save();
+      }
+    } finally {
+      if (session != null) {
+        session.logout();
+      }
     }
   }
 

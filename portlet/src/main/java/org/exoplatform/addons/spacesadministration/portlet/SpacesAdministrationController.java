@@ -58,7 +58,7 @@ public class SpacesAdministrationController {
       });
       parameters.put("groups", groups);
     } catch (Exception e) {
-      e.printStackTrace();
+      log.error("Error while getting all the membership types and groups - Cause : " + e.getMessage(), e);
     }
 
     return indexTmpl.ok(parameters);
@@ -67,7 +67,13 @@ public class SpacesAdministrationController {
   @Ajax
   @Resource
   public Response getMemberships() {
-    List<MembershipEntry> createMemberships = spacesAdministrationService.getSpaceCreationMemberships();
+    List<MembershipEntry> createMemberships = null;
+    try {
+      createMemberships = spacesAdministrationService.getSpaceCreationMemberships();
+    } catch (Exception e) {
+      log.error("Error while getting the memberships for spaces administration - Cause : " + e.getMessage(), e);
+      return Response.error("Error while getting the memberships");
+    }
 
     StringBuilder jsonMemberships = new StringBuilder("[");
     if(createMemberships != null && !createMemberships.isEmpty()) {
@@ -127,25 +133,4 @@ public class SpacesAdministrationController {
 
     return Response.ok("");
   }
-
-  /*
-  @Ajax
-  @Resource
-  public Response.Content save(String[] memberships) {
-    List<MembershipEntry> membershipEntries = new ArrayList<MembershipEntry>();
-    if(memberships != null) {
-      for(String membership: memberships) {
-        String[] membershipArray = membership.split(":");
-        membershipEntries.add(new MembershipEntry(membershipArray[1], membershipArray[0]));
-      }
-    }
-    try {
-      spacesAdministration.updateCreateMembership(membershipEntries);
-    } catch (RepositoryException e) {
-      e.printStackTrace();
-    }
-
-    return Response.ok("");
-  }
-  */
 }

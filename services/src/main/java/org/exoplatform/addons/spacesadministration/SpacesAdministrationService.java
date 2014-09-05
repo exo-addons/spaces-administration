@@ -36,19 +36,24 @@ public class SpacesAdministrationService {
   public boolean canCreateSpace() {
     boolean canCreateSpace = false;
 
-    List<MembershipEntry> memberships = getSpaceCreationMemberships();
+    try {
+      List<MembershipEntry> memberships = getSpaceCreationMemberships();
 
-    if(memberships == null || memberships.isEmpty()) {
-      // no membership - anyone can create a space
-      canCreateSpace = true;
-    } else {
-      Identity userIdentity = ConversationState.getCurrent().getIdentity();
-      for(MembershipEntry membership : memberships) {
-        if(userIdentity.isMemberOf(membership)) {
-          canCreateSpace = true;
-          break;
+      if(memberships == null || memberships.isEmpty()) {
+        // no membership - anyone can create a space
+        canCreateSpace = true;
+      } else {
+        Identity userIdentity = ConversationState.getCurrent().getIdentity();
+        for(MembershipEntry membership : memberships) {
+          if(userIdentity.isMemberOf(membership)) {
+            canCreateSpace = true;
+            break;
+          }
         }
       }
+    } catch(Exception e) {
+      log.error("Error while checking if the user can create spaces - Cause : " + e.getMessage(), e);
+      canCreateSpace = false;
     }
 
     return canCreateSpace;
@@ -112,7 +117,7 @@ public class SpacesAdministrationService {
    * Get the memberships allowed to create spaces
    * @return List of the memberships allowed to create spaces
    */
-  public List<MembershipEntry> getSpaceCreationMemberships() {
+  public List<MembershipEntry> getSpaceCreationMemberships() throws Exception {
     List<MembershipEntry> memberships = new ArrayList<MembershipEntry>();
 
     if(spacesAdministrationStorage.settingsEntityExists()) {
