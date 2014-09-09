@@ -51,3 +51,10 @@ A new interface is available once this extension installed, through the menu ite
 This interface allows to add or delete memberships.
 
 It also allows to reset the list to its default values, so to the value defined in exo.properties if it is the case or to *:/platform/administrators otherwise.
+
+
+## Roadmap / Ideas
+
+- i18n
+- archive projects (new checkbox in the admin to activate it + new button to archive a space + new portlet to list the archives spaces and restore them)
+- configuration of who can see all the spaces, even hidden ones
