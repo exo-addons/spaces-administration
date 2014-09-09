@@ -25,6 +25,9 @@ public class SpacesAdministrationController {
   @Path("index.gtmpl")
   Template indexTmpl;
 
+  @Inject
+  ResourceBundle resourceBundle;
+
   private SpacesAdministrationService spacesAdministrationService;
   private OrganizationService organizationService;
 
@@ -62,6 +65,25 @@ public class SpacesAdministrationController {
     }
 
     return indexTmpl.ok(parameters);
+  }
+
+  @Ajax
+  @Resource
+  public Response getI18n() {
+    StringBuilder jsonResourceBundle = new StringBuilder("[");
+    Enumeration<String> resourceBundleKeys = resourceBundle.getKeys();
+    while(resourceBundleKeys.hasMoreElements()) {
+      String key = resourceBundleKeys.nextElement();
+      if(key.startsWith("spacesadministration.")) {
+        jsonResourceBundle.append("{\"key\":\"").append(key).append("\",\"value\":\"").append(resourceBundle.getString(key)).append("\"},");
+      }
+    }
+    if(jsonResourceBundle.length() > 1) {
+      jsonResourceBundle.deleteCharAt(jsonResourceBundle.length() - 1);
+    }
+    jsonResourceBundle.append("]");
+
+    return Response.ok(jsonResourceBundle.toString());
   }
 
   @Ajax

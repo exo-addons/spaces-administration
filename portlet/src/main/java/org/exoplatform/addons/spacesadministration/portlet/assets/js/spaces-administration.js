@@ -1,3 +1,21 @@
+var resourceBundle = [];
+
+var loadResourceBundle = function() {
+  var listContainer = $('#listMemberships');
+
+  listContainer.jzAjax({
+    url: 'SpacesAdministrationController.getI18n()',
+    type: 'GET',
+    dataType: 'json'
+  }).done(function(data) {
+      for(var i=0; i<data.length; i++) {
+        resourceBundle[data[i].key] = data[i].value;
+      }
+    }).fail(function(data) {
+      setMessage('error', 'Error while getting the resource bundle.');
+    });
+};
+
 var addMembershipinDOM = function(membershipType, group) {
   var listContainer = $('#listMemberships');
   // add it only if it does not already exist
@@ -20,7 +38,7 @@ var loadMemberships = function() {
       // clean the list
       listContainer.html('');
       if(data.length == 0) {
-        listContainer.append('<div id="noMembershipMessage">No membership selected - Anyone can create a space</div>');
+        listContainer.append('<div id="noMembershipMessage">' + resourceBundle['spacesadministration.message.noMembership'] + '</div>');
       } else {
         // add the items in the HTML list
         for(var i=0; i<data.length; i++) {
@@ -83,7 +101,7 @@ var deleteMembership = function(deleteButton, membershipToDelete) {
 
       // add the No Membership message if the list is empty
       if(listContainer.find('li').size() == 0) {
-        listContainer.append('<div id="noMembershipMessage">No membership selected - Anyone can create a space</div>');
+        listContainer.append('<div id="noMembershipMessage">' + resourceBundle['spacesadministration.message.noMembership'] + '</div>');
       }
 
       setMessage('success', 'Membership ' + membershipToDelete + ' has been deleted succesfully.');
@@ -122,5 +140,6 @@ var cleanMessage = function() {
 };
 
 $(function() {
+  loadResourceBundle();
   loadMemberships();
 });
