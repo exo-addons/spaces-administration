@@ -37,7 +37,7 @@ public class SpacesAdministrationController {
   }
 
   @View
-  public Response.Render index() {
+  public Response.Content index() {
     Map<String, Object> parameters = new HashMap<String, Object>();
 
     try {
