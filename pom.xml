@@ -36,6 +36,13 @@
   <packaging>pom</packaging>
   <description>Spaces Administration Extension</description>
 
+  <scm>
+    <connection>scm:git:git://github.com/exo-addons/spaces-administration.git</connection>
+    <developerConnection>scm:git:git@github.com:exo-addons/spaces-administration.git</developerConnection>
+    <url>https://github.com/exo-addons/spaces-administration</url>
+    <tag>HEAD</tag>
+  </scm>
+
   <dependencyManagement>
     <dependencies>
       <!-- Import versions from platform project -->
