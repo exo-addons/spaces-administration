@@ -1,5 +1,4 @@
 <%
-import org.exoplatform.webui.core.UIPopupWindow;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.addons.spacesadministration.SpacesAdministrationService;
 
@@ -46,6 +45,6 @@ def spacesAdministrationService = (SpacesAdministrationService) ExoContainerCont
 	</div>
  
 	<% uiform.end() %>
-	<div class="uiPopupMySpaces"><% uicomponent.renderChild(UIPopupWindow.class) %></div>
+	<div class="uiPopupMySpaces"><% uicomponent.renderChild(org.exoplatform.social.webui.composer.PopupContainer.class) %></div>
 </div>
 
