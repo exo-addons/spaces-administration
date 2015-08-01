@@ -19,6 +19,13 @@
   <component>
     <key>org.exoplatform.social.core.space.spi.SpaceService</key>
     <type>org.exoplatform.addons.spacesadministration.SpaceServiceImpl</type>
+    <component-plugins>
+      <component-plugin>
+        <name>SpaceActivityPublisher</name>
+        <set-method>addSpaceListener</set-method>
+        <type>org.exoplatform.social.core.application.SpaceActivityPublisher</type>
+      </component-plugin>
+    </component-plugins>
   </component>
 
   <external-component-plugins>
