@@ -76,7 +76,7 @@ public class SpacesAdministrationStorage {
       String[] membershipIds = values.split(";");
       for (String membershipId : membershipIds) {
         String[] membershipParts = membershipId.split(":");
-        memberships.add(new MembershipEntry(membershipParts[1], membershipParts[1]));
+        memberships.add(new MembershipEntry(membershipParts[1], membershipParts[0]));
       }
     }
     return memberships;
