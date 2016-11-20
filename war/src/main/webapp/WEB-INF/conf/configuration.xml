@@ -21,22 +21,6 @@
     <type>org.exoplatform.addons.spacesadministration.SpaceServiceImpl</type>
   </component>
 
-  <external-component-plugins>
-    <target-component>org.exoplatform.services.jcr.RepositoryService</target-component>
-    <component-plugin>
-      <name>add.nodeType</name>
-      <set-method>addPlugin</set-method>
-      <type>org.exoplatform.services.jcr.impl.AddNodeTypePlugin</type>
-      <init-params>
-        <values-param>
-          <name>autoCreatedInNewRepository</name>
-          <description>Node types configuration file</description>
-          <value>war:/conf/spaces-administration/nodetypes.xml</value>
-        </values-param>
-      </init-params>
-    </component-plugin>
-  </external-component-plugins>
-
   <import>war:/conf/spaces-administration/portal/portal-configuration.xml</import>
 
 </configuration>
