@@ -49,7 +49,7 @@
       <dependency>
         <groupId>org.exoplatform.platform</groupId>
         <artifactId>platform</artifactId>
-        <version>4.2.x-SNAPSHOT</version>
+        <version>4.4.x-SNAPSHOT</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
