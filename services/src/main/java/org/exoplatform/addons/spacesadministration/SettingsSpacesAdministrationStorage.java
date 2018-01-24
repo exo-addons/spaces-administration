@@ -1,26 +1,27 @@
 package org.exoplatform.addons.spacesadministration;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.jcr.RepositoryException;
-
 import org.exoplatform.commons.api.settings.SettingService;
 import org.exoplatform.commons.api.settings.SettingValue;
 import org.exoplatform.commons.api.settings.data.Context;
 import org.exoplatform.commons.api.settings.data.Scope;
 import org.exoplatform.services.security.MembershipEntry;
 
+import javax.jcr.RepositoryException;
+import java.util.ArrayList;
+import java.util.List;
+
 /**
- * @author Thomas Delhoménie
+ * Storage implementation which stores Spaces Administration data with Settings API
  */
-public class SpacesAdministrationStorage {
+public class SettingsSpacesAdministrationStorage {
 
-  public final static String SETTINGS = "spacesadministrationsettings";
+  public final static String SETTINGS = "spacesAdministrationMemberships";
 
-  private SettingService     settingService;
+  public static final String MEMBERSHIPS_SETTING_SEPARATOR = ",";
 
-  public SpacesAdministrationStorage(SettingService settingService) {
+  private SettingService settingService;
+
+  public SettingsSpacesAdministrationStorage(SettingService settingService) {
     this.settingService = settingService;
   }
 
@@ -54,7 +55,7 @@ public class SpacesAdministrationStorage {
     } else {
       String values = (String) settingValue.getValue();
       if (!values.contains(membershipToAdd)) {
-        values += ";" + membershipToAdd;
+        values += MEMBERSHIPS_SETTING_SEPARATOR + membershipToAdd;
       }
       settingValue = SettingValue.create(values);
     }
@@ -73,7 +74,7 @@ public class SpacesAdministrationStorage {
 
     if (settingValue != null) {
       String values = (String) settingValue.getValue();
-      String[] membershipIds = values.split(";");
+      String[] membershipIds = values.split(MEMBERSHIPS_SETTING_SEPARATOR);
       for (String membershipId : membershipIds) {
         String[] membershipParts = membershipId.split(":");
         memberships.add(new MembershipEntry(membershipParts[1], membershipParts[0]));
@@ -100,8 +101,8 @@ public class SpacesAdministrationStorage {
     if (settingValue != null) {
       String values = (String) settingValue.getValue();
       if (values.contains(membershipToDelete)) {
-        values = values.replace(membershipToDelete + ";", "");
-        values = values.replace(";" + membershipToDelete, "");
+        values = values.replace(membershipToDelete + MEMBERSHIPS_SETTING_SEPARATOR, "");
+        values = values.replace(MEMBERSHIPS_SETTING_SEPARATOR + membershipToDelete, "");
         values = values.replace(membershipToDelete, "");
 
         if (values.trim().isEmpty()) {

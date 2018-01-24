@@ -22,9 +22,9 @@ public class SpacesAdministrationService {
 
   private InitParams initParams;
 
-  private SpacesAdministrationStorage spacesAdministrationStorage;
+  private SettingsSpacesAdministrationStorage spacesAdministrationStorage;
 
-  public SpacesAdministrationService(InitParams initParams, SpacesAdministrationStorage spacesAdministrationStorage) {
+  public SpacesAdministrationService(InitParams initParams, SettingsSpacesAdministrationStorage spacesAdministrationStorage) {
     this.initParams = initParams;
     this.spacesAdministrationStorage = spacesAdministrationStorage;
   }
