@@ -47,7 +47,6 @@ public class JCRSpacesAdministrationStorage {
 
   /**
    * Create the Settings JCR node
-   * @return The newly created Settings node
    * @throws RepositoryException
    */
   protected void createSettingsEntity() throws Exception {
