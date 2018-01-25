@@ -43,13 +43,17 @@
     <tag>HEAD</tag>
   </scm>
 
+  <properties>
+    <org.exoplatform.platform.version>4.4.x-SNAPSHOT</org.exoplatform.platform.version>
+  </properties>
+
   <dependencyManagement>
     <dependencies>
       <!-- Import versions from platform project -->
       <dependency>
         <groupId>org.exoplatform.platform</groupId>
         <artifactId>platform</artifactId>
-        <version>4.4.x-SNAPSHOT</version>
+        <version>${org.exoplatform.platform.version}</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
