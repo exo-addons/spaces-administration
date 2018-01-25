@@ -15,11 +15,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @author Thomas Delhoménie
+ * Storage implementation which stores Spaces Administration data in JCR
  */
-public class SpacesAdministrationStorage {
+public class JCRSpacesAdministrationStorage {
 
-  private Log log = ExoLogger.getLogger(SpacesAdministrationStorage.class);
+  private Log log = ExoLogger.getLogger(JCRSpacesAdministrationStorage.class);
 
   public final static String SETTINGS_NODE_WORKSPACE = "social";
   public final static String SETTINGS_NODE_PATH = "exo:applications/spacesadministration";
@@ -30,7 +30,7 @@ public class SpacesAdministrationStorage {
    * Check if the Settings node exists
    * @return The node containing the memberships
    */
-  public boolean settingsEntityExists() throws Exception {
+  public boolean settingsEntityExists() {
     Session session = null;
     try {
       session = getSession();

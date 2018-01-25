@@ -22,9 +22,9 @@ public class SpacesAdministrationService {
 
   private InitParams initParams;
 
-  private SpacesAdministrationStorage spacesAdministrationStorage;
+  private SettingsSpacesAdministrationStorage spacesAdministrationStorage;
 
-  public SpacesAdministrationService(InitParams initParams, SpacesAdministrationStorage spacesAdministrationStorage) {
+  public SpacesAdministrationService(InitParams initParams, SettingsSpacesAdministrationStorage spacesAdministrationStorage) {
     this.initParams = initParams;
     this.spacesAdministrationStorage = spacesAdministrationStorage;
   }
@@ -67,8 +67,6 @@ public class SpacesAdministrationService {
     if(spacesAdministrationStorage.settingsEntityExists()) {
       throw new Exception("Settings Entity already exists - Cannot create it");
     }
-
-    spacesAdministrationStorage.createSettingsEntity();
 
     ValueParam createMembershipInitParam = initParams.getValueParam(SPACES_CREATE_MEMBERSHIPS_PROPERTY);
     if(createMembershipInitParam != null) {

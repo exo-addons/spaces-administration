@@ -3,7 +3,15 @@
 	xmlns="http://www.exoplaform.org/xml/ns/kernel_1_2.xsd">
 
   <component>
-    <type>org.exoplatform.addons.spacesadministration.SpacesAdministrationStorage</type>
+    <type>org.exoplatform.addons.spacesadministration.JCRSpacesAdministrationStorage</type>
+  </component>
+
+  <component>
+    <type>org.exoplatform.addons.spacesadministration.SettingsSpacesAdministrationStorage</type>
+  </component>
+
+  <component>
+    <type>org.exoplatform.addons.spacesadministration.SpacesAdministrationSettingsMigration</type>
   </component>
 
   <component>
@@ -19,23 +27,99 @@
   <component>
     <key>org.exoplatform.social.core.space.spi.SpaceService</key>
     <type>org.exoplatform.addons.spacesadministration.SpaceServiceImpl</type>
-  </component>
+    <component-plugins>
+      <!-- Default applications to be installed when creating a new space -->
+      <component-plugin>
+        <name>Space Application Configuration</name>
+        <set-method>setSpaceApplicationConfigPlugin</set-method>
+        <type>org.exoplatform.social.core.space.SpaceApplicationConfigPlugin</type>
+        <init-params>
 
-  <external-component-plugins>
-    <target-component>org.exoplatform.services.jcr.RepositoryService</target-component>
-    <component-plugin>
-      <name>add.nodeType</name>
-      <set-method>addPlugin</set-method>
-      <type>org.exoplatform.services.jcr.impl.AddNodeTypePlugin</type>
-      <init-params>
-        <values-param>
-          <name>autoCreatedInNewRepository</name>
-          <description>Node types configuration file</description>
-          <value>war:/conf/spaces-administration/nodetypes.xml</value>
-        </values-param>
-      </init-params>
-    </component-plugin>
-  </external-component-plugins>
+          <object-param>
+            <name>spaceHomeApplication</name>
+            <description>Space Home Application</description>
+            <object type="org.exoplatform.social.core.space.SpaceApplicationConfigPlugin$SpaceApplication">
+              <field name="portletApp"><string>social-portlet</string></field>
+              <field name="portletName"><string>SpaceActivityStreamPortlet</string></field>
+              <field name="appTitle"><string>Home</string></field>
+              <!--<field name="icon"><string>SpaceHomeIcon</string></field>-->
+            </object>
+          </object-param>
+
+          <object-param>
+            <name>spaceApplicationListConfig</name>
+            <description>space application list configuration</description>
+            <object type="org.exoplatform.social.core.space.SpaceApplicationConfigPlugin">
+              <field name="spaceApplicationList">
+                <collection type="java.util.ArrayList">
+                  <value>
+                    <object type="org.exoplatform.social.core.space.SpaceApplicationConfigPlugin$SpaceApplication">
+                      <field name="portletApp"><string>dashboard</string></field>
+                      <field name="portletName"><string>DashboardPortlet</string></field>
+                      <field name="appTitle"><string>Dashboard</string></field>
+                      <field name="removable"><boolean>true</boolean></field>
+                      <field name="order"><int>1</int></field>
+                      <field name="uri"><string>dashboard</string></field>
+                      <!--<field name="icon"><string>SpaceDashboardIcon</string></field>-->
+                    </object>
+                  </value>
+                  <value>
+                    <object type="org.exoplatform.social.core.space.SpaceApplicationConfigPlugin$SpaceApplication">
+                      <field name="portletApp"><string>social-portlet</string></field>
+                      <field name="portletName"><string>SpaceSettingPortlet</string></field>
+                      <field name="appTitle"><string>Space Settings</string></field>
+                      <field name="removable"><boolean>false</boolean></field>
+                      <field name="order"><int>2</int></field>
+                      <field name="uri"><string>settings</string></field>
+                      <!--<field name="icon"><string>SpaceSettingsIcon</string></field>-->
+                    </object>
+                  </value>
+                  <value>
+                    <object type="org.exoplatform.social.core.space.SpaceApplicationConfigPlugin$SpaceApplication">
+                      <field name="portletApp"><string>social-portlet</string></field>
+                      <field name="portletName"><string>MembersPortlet</string></field>
+                      <field name="appTitle"><string>Members</string></field>
+                      <field name="removable"><boolean>true</boolean></field>
+                      <field name="order"><int>3</int></field>
+                      <field name="uri"><string>members</string></field>
+                      <!--<field name="icon"><string>SpaceMembersIcon</string></field>-->
+                    </object>
+                  </value>
+                </collection>
+              </field>
+            </object>
+          </object-param>
+
+        </init-params>
+      </component-plugin>
+
+      <component-plugin>
+        <name>SpaceActivityPublisher</name>
+        <set-method>addSpaceListener</set-method>
+        <type>org.exoplatform.social.core.application.SpaceActivityPublisher</type>
+      </component-plugin>
+
+      <component-plugin>
+        <name>portlets.prefs.required</name>
+        <set-method>setPortletsPrefsRequired</set-method>
+        <type>org.exoplatform.social.core.application.PortletPreferenceRequiredPlugin</type>
+        <init-params>
+          <values-param>
+            <name>portletsPrefsRequired</name>
+            <value>SpaceActivityStreamPortlet</value>
+            <value>SpaceSettingPortlet</value>
+            <value>MembersPortlet</value>
+          </values-param>
+        </init-params>
+      </component-plugin>
+    </component-plugins>
+    <init-params>
+      <value-param>
+        <name>spaces.super.administrators</name>
+        <value>${social.spaces.administrators:}</value>
+      </value-param>
+    </init-params>
+  </component>
 
   <import>war:/conf/spaces-administration/portal/portal-configuration.xml</import>
 

@@ -2,8 +2,10 @@ package org.exoplatform.addons.spacesadministration;
 
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.container.xml.InitParams;
+import org.exoplatform.portal.config.UserACL;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
+import org.exoplatform.services.security.IdentityRegistry;
 import org.exoplatform.social.core.space.model.Space;
 import org.exoplatform.social.core.storage.api.ActivityStreamStorage;
 import org.exoplatform.social.core.storage.api.IdentityStorage;
@@ -18,8 +20,8 @@ public class SpaceServiceImpl extends org.exoplatform.social.core.space.impl.Spa
 
   private SpacesAdministrationService spacesAdministrationService;
 
-  public SpaceServiceImpl(InitParams params, SpaceStorage spaceStorage, IdentityStorage identityStorage, ActivityStreamStorage streamStorage) throws Exception {
-    super(params, spaceStorage, identityStorage, streamStorage);
+  public SpaceServiceImpl(InitParams params, SpaceStorage spaceStorage, IdentityStorage identityStorage, ActivityStreamStorage streamStorage, UserACL userACL, IdentityRegistry identityRegistry) throws Exception {
+    super(params, spaceStorage, identityStorage, streamStorage, userACL, identityRegistry);
 
     spacesAdministrationService = (SpacesAdministrationService) ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(SpacesAdministrationService.class);
   }

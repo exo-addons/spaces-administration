@@ -2,49 +2,44 @@
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.addons.spacesadministration.SpacesAdministrationService;
 
-def uicomponentId = uicomponent.id;
-def labelActionAddSpace = _ctx.appRes("${uicomponentId}.label.AddNewSpace")
 def rcontext = _ctx.getRequestContext() ;
-def jsmanager = rcontext.getJavascriptManager();
-def searchLabel  = _ctx.appRes("${uicomponentId}.label.Search");
 def typeOfRelation = uicomponent.getTypeOfRelation();
 def spaceURL = uicomponent.getSpaceURL();
     
 def params = """ {
-  uicomponentId: '${uicomponentId}',
+  uicomponentId: '${uicomponent.id}',
 	typeOfRelation: '$typeOfRelation',
 	spaceURL: '$spaceURL',
 	typeOfSuggest: 'space'
 } """
 
-jsmanager.require("SHARED/jquery", "jq")
-         .require("SHARED/bts_tooltip").addScripts("jq('*[rel=\"tooltip\"]').tooltip();")
-         .require("SHARED/social-ui-space-search", "socialUISpaceSearch").addScripts("socialUISpaceSearch.init($params);")
-         .require("SHARED/uiForm");
-
+rcontext.getJavascriptManager().require("SHARED/jquery", "jq")
+        .require("SHARED/bts_tooltip").addScripts("jq('*[rel=\"tooltip\"]').tooltip();")
+        .require("SHARED/social-ui-space-search", "socialUISpaceSearch").addScripts("socialUISpaceSearch.init($params);")
+        .require("SHARED/uiForm");
+//
 uicomponent.initPlaceholder();
 
 def spacesAdministrationService = (SpacesAdministrationService) ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(SpacesAdministrationService.class);
 
 %>
 <div class="uiSpaceSearch">
-<% uiform.begin() %>
-    <!--search by name-->   
+<% uiform.begin();%>
 	<div class="uiGrayLightBox clearfix">
-		<% if(spacesAdministrationService.canCreateSpace()) { %>
-      <button class="btn btn-primary pull-left" type="button" onclick="<%= uicomponent.event("AddSpace") %>" ><i class="uiIconSocSimplePlus uiIconSocWhite"></i><%= labelActionAddSpace %></button>
-		<% } %>
-
+        <% if(spacesAdministrationService.canCreateSpace()) { %>
+          <button class="btn btn-primary pull-left" type="button" onclick="<%= uicomponent.event("AddSpace") %>">
+             <i class="uiIconSocSimplePlus uiIconSocWhite"></i><%=_ctx.appRes("UISpaceSearch.label.AddNewSpace")%>
+          </button>
+        <% } %>
 		<div class="uiSearchInput pull-right searchWithIcon">
 		    <a data-original-title="Search" class="advancedSearch" rel="tooltip" data-placement="bottom" onclick="<%=uicomponent.event("Search")%>" href="javascript:void(0)">
 		    	<i class="uiIconSearch uiIconLightGray"></i>
 		    </a>
 			<%uiform.renderField(uicomponent.SPACE_SEARCH); %>
 		</div>
-		<button type="button" class="btn hide" id="SearchButton" onclick="<%=uicomponent.event("Search")%>" ><%=searchLabel %></button>
+		<button type="button" class="btn hide" id="SearchButton" onclick="<%=uicomponent.event("Search")%>"><%=_ctx.appRes("UISpaceSearch.label.Search")%></button>
 	</div>
  
-	<% uiform.end() %>
-	<div class="uiPopupMySpaces"><% uicomponent.renderChild(org.exoplatform.social.webui.composer.PopupContainer.class) %></div>
+	<% uiform.end();%>
+	<div class="uiPopupMySpaces"><%uicomponent.renderChild(org.exoplatform.social.webui.composer.PopupContainer.class);%></div>
 </div>
-
