@@ -63,20 +63,6 @@
         <artifactId>maven-assembly-plugin</artifactId>
         <executions>
           <execution>
-            <id>package-extension-4.0-tomcat</id>
-            <phase>package</phase>
-            <goals>
-              <goal>single</goal>
-            </goals>
-            <configuration>
-              <finalName>spaces-administration-4.0-tomcat</finalName>
-              <appendAssemblyId>false</appendAssemblyId>
-              <descriptors>
-                <descriptor>src/main/assemblies/spaces-administration-4.0-tomcat.xml</descriptor>
-              </descriptors>
-            </configuration>
-          </execution>
-          <execution>
             <id>package-extension</id>
             <phase>package</phase>
             <goals>
