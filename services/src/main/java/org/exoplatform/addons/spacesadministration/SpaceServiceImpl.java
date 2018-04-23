@@ -7,7 +7,6 @@ import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
 import org.exoplatform.services.security.IdentityRegistry;
 import org.exoplatform.social.core.space.model.Space;
-import org.exoplatform.social.core.storage.api.ActivityStreamStorage;
 import org.exoplatform.social.core.storage.api.IdentityStorage;
 import org.exoplatform.social.core.storage.api.SpaceStorage;
 
@@ -20,10 +19,10 @@ public class SpaceServiceImpl extends org.exoplatform.social.core.space.impl.Spa
 
   private SpacesAdministrationService spacesAdministrationService;
 
-  public SpaceServiceImpl(InitParams params, SpaceStorage spaceStorage, IdentityStorage identityStorage, ActivityStreamStorage streamStorage, UserACL userACL, IdentityRegistry identityRegistry) throws Exception {
-    super(params, spaceStorage, identityStorage, streamStorage, userACL, identityRegistry);
+  public SpaceServiceImpl(InitParams params, SpaceStorage spaceStorage, IdentityStorage identityStorage, UserACL userACL, IdentityRegistry identityRegistry) throws Exception {
+    super(params, spaceStorage, identityStorage, userACL, identityRegistry);
 
-    spacesAdministrationService = (SpacesAdministrationService) ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(SpacesAdministrationService.class);
+    spacesAdministrationService = ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(SpacesAdministrationService.class);
   }
 
   @Override
