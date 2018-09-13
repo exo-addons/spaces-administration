@@ -44,7 +44,7 @@
   </scm>
 
   <properties>
-    <org.exoplatform.platform.version>5.0.0</org.exoplatform.platform.version>
+    <org.exoplatform.platform.version>5.0.2</org.exoplatform.platform.version>
   </properties>
 
   <dependencyManagement>

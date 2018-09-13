@@ -1,5 +1,6 @@
 package org.exoplatform.addons.spacesadministration;
 
+import org.exoplatform.commons.api.notification.service.WebNotificationService;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.container.xml.InitParams;
 import org.exoplatform.portal.config.UserACL;
@@ -19,8 +20,8 @@ public class SpaceServiceImpl extends org.exoplatform.social.core.space.impl.Spa
 
   private SpacesAdministrationService spacesAdministrationService;
 
-  public SpaceServiceImpl(InitParams params, SpaceStorage spaceStorage, IdentityStorage identityStorage, UserACL userACL, IdentityRegistry identityRegistry) throws Exception {
-    super(params, spaceStorage, identityStorage, userACL, identityRegistry);
+  public SpaceServiceImpl(InitParams params, SpaceStorage spaceStorage, IdentityStorage identityStorage, UserACL userACL, IdentityRegistry identityRegistry, WebNotificationService webNotificationService) throws Exception {
+    super(params, spaceStorage, identityStorage, userACL, identityRegistry, webNotificationService);
 
     spacesAdministrationService = ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(SpacesAdministrationService.class);
   }
